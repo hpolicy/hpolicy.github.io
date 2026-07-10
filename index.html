@@ -73,13 +73,14 @@ section{padding:52px 0;border-top:1px solid var(--line)}
 .card.member h3 .kr{font-size:14px;color:var(--muted);margin-left:7px;font-weight:400;font-family:"Pretendard Variable",Pretendard,sans-serif}
 .card.member .prog{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:3px}
 .card.member .since{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;color:var(--crimson)}
-.pub-list{list-style:none;counter-reset:pub}
+.pub-list{list-style:none}
 .pub-list li{display:grid;grid-template-columns:38px 1fr;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);font-size:14.4px;line-height:1.52}
-.pub-list li::before{counter-increment:pub;content:counter(pub) ".";font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;color:var(--crimson);padding-top:4px;text-align:right}
+.pub-list li::before{counter-increment:pub -1;content:counter(pub) ".";font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;color:var(--crimson);padding-top:4px;text-align:right}
 .pub-list .title{font-weight:600}
 .pub-list .venue{color:var(--muted);font-style:italic}
 .pub-list a.doi{color:var(--crimson);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;white-space:nowrap}
 .pub-list strong.me{color:var(--ink)}
+.pub-list .kr-orig{display:block;font-family:"Pretendard Variable",Pretendard,sans-serif;color:var(--muted);font-size:12.8px;margin-top:3px;word-break:keep-all}
 .pub-list .lang{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--slate);border:1px solid var(--line);border-radius:12px;padding:1px 7px;margin-left:4px;white-space:nowrap}
 .note{color:var(--muted);font-size:13.5px;margin-top:18px;max-width:76ch}
 .info-list{list-style:none;margin-top:2px}
@@ -146,7 +147,7 @@ footer .brand{color:#fff} footer .brand small{color:#8a8a85}
     <nav aria-label="Primary">
       <button class="menu-btn" aria-expanded="false" aria-controls="primary-menu">Menu</button>
       <ul id="primary-menu">
-        <li><a href="#about">About</a></li>
+        <li><a href="#top">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="publications.html">Publications</a></li>
         <li><a href="members.html">Members</a></li>
@@ -423,10 +424,14 @@ footer .brand{color:#fff} footer .brand small{color:#8a8a85}
         <dd>Room 533, Woodang Hall for General Education<br>
           <span style="color:var(--muted);font-size:14px">Dean’s Office, University College · 우당교양관 533호</span><br>
           <a href="tel:+82232901269">+82-2-3290-1269</a></dd>
-        <dt>Research lab</dt>
+        <dt>Faculty office</dt>
         <dd>B-365 Hana Science Hall<br>
           <span style="color:var(--muted);font-size:14px">하나과학관 B동 365호</span><br>
           <a href="tel:+82232905675">+82-2-3290-5675</a></dd>
+        <dt>Lab</dt>
+        <dd>Health &amp; Social Policy Lab<br>
+          B-364 Hana Science Hall<br>
+          <span style="color:var(--muted);font-size:14px">하나과학관 B동 364호</span></dd>
         <dt>Address</dt>
         <dd style="color:var(--muted);font-size:14.5px">145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea</dd>
       </dl></div>
@@ -440,7 +445,7 @@ footer .brand{color:#fff} footer .brand small{color:#8a8a85}
     <div class="foot-grid">
       <a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span><span>Haejoo Chung<small>Health &amp; Social Policy</small></span></a>
       <div class="foot-links">
-        <a href="index.html#about">About</a>
+        <a href="index.html#top">About</a>
         <a href="projects.html">Projects</a>
         <a href="publications.html">Publications</a>
         <a href="members.html">Members</a>
