@@ -203,9 +203,10 @@ footer .brand{color:#fff} footer .brand small{color:#8a8a85}
 <section id="research">
   <div class="wrap">
     <div class="section-head reveal"><span class="eyebrow">A conceptual model</span>
-      <h2 class="section-title">Health is a political outcome</h2></div>
+      <h2 class="section-title">Health is a political outcome</h2>
+      <p>Policy has an address.</p></div>
     <div class="model-figure reveal">
-<svg viewBox="0 0 1480 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Conceptual model: political factors shape the welfare state and the urban environment, which act through mediating conditions on the distribution of risk and health">
+<svg viewBox="0 0 1200 584" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Conceptual model. The Healthy City Atlas — a spatial data and analytics layer — spans the top as a cross-cutting channel. Political factors shape the welfare state, which takes form as labour market regulation and health and social care provision. These act through employment conditions and access to care on the spatial distribution of risk — access shifts that distribution through social care and moderates the risk-to-outcome translation through health care — producing health outcomes and equity. Evidence feeds back to policy.">
   <defs>
     <marker id="ah" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto"><path d="M0,0 L7.5,3 L0,6 Z" fill="#16181d"/></marker>
     <marker id="af" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto"><path d="M0,0 L7.5,3 L0,6 Z" fill="#8a1a2c"/></marker>
@@ -213,111 +214,94 @@ footer .brand{color:#fff} footer .brand small{color:#8a8a85}
   </defs>
   <style>
     .nlab{font-family:"IBM Plex Sans",sans-serif;font-size:15px;fill:#16181d;font-weight:500}
-    .nsub{font-family:"IBM Plex Mono",monospace;font-size:11.5px;fill:#6a6a66}
-    .col{font-family:"IBM Plex Mono",monospace;font-size:10.5px;fill:#9a978f;letter-spacing:1.6px}
+    .nsub{font-family:"IBM Plex Mono",monospace;font-size:12.5px;fill:#55554f}
+    .col{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:#6f6d64;letter-spacing:1.6px}
     .box{fill:#fff;stroke:#16181d;stroke-width:1.3}
     .soc{stroke:#3d5a6c;stroke-width:3}
-    .env{stroke:#6b7f52;stroke-width:3}
     .car{stroke:#8a1a2c;stroke-width:3}
     .sld{stroke:#16181d;stroke-width:1.5;fill:none}
-    .drop{stroke:#5f6d78;stroke-width:1.4;fill:none;stroke-dasharray:6 5;opacity:.75}
-    .fbk{stroke:#8a1a2c;stroke-width:1.5;fill:none;stroke-dasharray:7 5}
+    .drop{stroke:#5f6d78;stroke-width:1.4;fill:none;stroke-dasharray:6 5;opacity:.8}
+    .care{stroke:#8a1a2c;stroke-width:1.4;fill:none;opacity:.85}
   </style>
 
-  <text class="col" x="109" y="34" text-anchor="middle">DETERMINANTS</text>
-  <text class="col" x="450" y="34" text-anchor="middle">INSTITUTIONS &amp; POLICY</text>
-  <text class="col" x="888" y="34" text-anchor="middle">MEDIATING CONDITIONS</text>
-  <text class="col" x="1180" y="34" text-anchor="middle">RISK</text>
+  <!-- Healthy City Atlas: spatial data & analytics, full-width cross-cutting layer -->
+  <rect x="60" y="40" width="1080" height="54" rx="12" fill="#fbfbf9" stroke="#5f6d78" stroke-width="1.3" stroke-dasharray="5 4"/>
+  <text class="nlab" x="600" y="64" text-anchor="middle" fill="#3d5a6c">Healthy City Atlas — spatial data &amp; analytics</text>
+  <text class="nsub" x="600" y="82" text-anchor="middle">sensing · integrated records · analytics — a channel, not a cause</text>
 
-  <!-- digital layer: three free-hanging vertical dashes (no attachment) -->
-  <path class="drop" marker-end="url(#ag)" d="M320,104 L320,150"/>
-  <path class="drop" marker-end="url(#ag)" d="M456,104 L456,150"/>
-  <path class="drop" marker-end="url(#ag)" d="M592,104 L592,150"/>
+  <path class="drop" marker-end="url(#ag)" d="M145,96 L145,124"/>
+  <path class="drop" marker-end="url(#ag)" d="M367,96 L367,124"/>
+  <path class="drop" marker-end="url(#ag)" d="M610,96 L610,124"/>
+  <path class="drop" marker-end="url(#ag)" d="M838,96 L838,124"/>
+  <path class="drop" marker-end="url(#ag)" d="M1088,96 L1088,124"/>
 
-  <!-- political -> urban ; political -> welfare state -->
-  <path class="sld" marker-end="url(#ah)" d="M194,308 C210,252 214,222 232,208"/>
-  <path class="sld" marker-end="url(#ah)" d="M194,338 C208,344 214,346 230,350"/>
+  <text class="col" x="145" y="156" text-anchor="middle">DETERMINANTS</text>
+  <text class="col" x="489" y="156" text-anchor="middle">INSTITUTIONS &amp; POLICY</text>
+  <text class="col" x="838" y="156" text-anchor="middle">MEDIATING CONDITIONS</text>
+  <text class="col" x="1088" y="156" text-anchor="middle">RISK</text>
 
-  <!-- welfare state -> labour market ; -> health &amp; social care -->
-  <path class="sld" marker-end="url(#ah)" d="M440,334 C462,320 472,310 492,302"/>
-  <path class="sld" marker-end="url(#ah)" d="M440,366 C464,392 474,412 492,428"/>
+  <!-- flow arrows -->
+  <path class="sld" marker-end="url(#ah)" d="M220,318 L282,318"/>
+  <path class="sld" marker-end="url(#ah)" d="M452,306 C480,290 492,262 512,252"/>
+  <path class="sld" marker-end="url(#ah)" d="M452,330 C480,346 492,376 512,386"/>
+  <path class="sld" marker-end="url(#ah)" d="M708,250 L740,250"/>
+  <path class="sld" marker-end="url(#ah)" d="M708,388 L740,388"/>
+  <!-- employment -> risk -->
+  <path class="sld" marker-end="url(#ah)" d="M936,252 C968,262 992,272 1014,284"/>
+  <!-- access: social care shifts the spatial distribution -->
+  <path class="care" marker-end="url(#af)" d="M936,384 C972,382 1004,380 1028,378"/>
+  <text class="nsub" x="986" y="372" text-anchor="middle" fill="#8a1a2c">social care</text>
+  <!-- access: health care moderates risk -> outcome -->
+  <path class="care" marker-end="url(#af)" d="M936,402 C990,416 1040,424 1084,430"/>
+  <text class="nsub" x="1000" y="410" text-anchor="middle" fill="#8a1a2c">health care</text>
+  <!-- risk -> outcome -->
+  <path class="sld" marker-end="url(#ah)" d="M1088,400 L1088,450"/>
 
-  <!-- horizontal parallel paths into mediators -->
-  <path class="sld" marker-end="url(#ah)" d="M440,208 L776,208"/>
-  <path class="sld" marker-end="url(#ah)" d="M710,302 L776,302"/>
-  <path class="sld" marker-end="url(#ah)" d="M710,432 L776,432"/>
-
-  <!-- mediators -> risk circle -->
-  <path class="sld" marker-end="url(#ah)" d="M994,214 C1040,226 1076,232 1106,246"/>
-  <path class="sld" marker-end="url(#ah)" d="M994,302 L1088,302"/>
-  <!-- social care shifts the distribution of risk; health care moderates risk → outcome -->
-  <path class="sld" marker-end="url(#ah)" d="M990,414 C1032,404 1072,392 1114,374"/>
-  <path class="sld" marker-end="url(#ah)" d="M990,450 L1186,450"/>
-  <text class="nsub" x="1046" y="390" text-anchor="middle">social care</text>
-  <text class="nsub" x="1074" y="444" text-anchor="middle">health care</text>
-
-  <!-- risk -> outcome, straight down -->
-  <path class="sld" marker-end="url(#ah)" d="M1180,396 L1180,466"/>
-
-  <!-- feedback: evidence back to politics -->
-  <path class="fbk" marker-end="url(#af)" d="M1180,552 C1180,620 900,630 620,630 C340,630 128,626 109,368"/>
-  <text class="nsub" x="620" y="650" text-anchor="middle" fill="#8a1a2c">evidence for decision-making · Healthy City Atlas</text>
+  <!-- feedback (compact, visible) -->
+  <text x="1088" y="556" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="15" font-weight="500" fill="#8a1a2c">&#8635; evidence &#8594; policy</text>
 
   <!-- Political factors -->
-  <rect class="box" x="24" y="290" width="170" height="70" rx="8"/>
-  <text class="nlab" x="109" y="320" text-anchor="middle">Political</text>
-  <text class="nlab" x="109" y="340" text-anchor="middle">factors</text>
+  <rect class="box" x="70" y="286" width="150" height="64" rx="10"/>
+  <text class="nlab" x="145" y="312" text-anchor="middle">Political</text>
+  <text class="nlab" x="145" y="332" text-anchor="middle">factors</text>
 
-  <!-- Digital &amp; data infrastructure (top, cross-cutting) -->
-  <rect x="236" y="48" width="440" height="56" rx="10" fill="#fbfbf9" stroke="#5f6d78" stroke-width="1.3" stroke-dasharray="5 4"/>
-  <text class="nlab" x="456" y="72" text-anchor="middle" fill="#3d5a6c">Digital &amp; data infrastructure</text>
-  <text class="nsub" x="456" y="91" text-anchor="middle">AI · sensing · integrated records — a channel, not a cause</text>
-
-  <!-- Urban &amp; built environment -->
-  <rect class="box env" x="236" y="176" width="204" height="64" rx="8"/>
-  <text class="nlab" x="338" y="202" text-anchor="middle">Urban &amp; built</text>
-  <text class="nlab" x="338" y="222" text-anchor="middle">environment</text>
-
-  <!-- Welfare state (single line) -->
-  <rect class="box soc" x="234" y="320" width="206" height="60" rx="8"/>
-  <text class="nlab" x="337" y="356" text-anchor="middle">Welfare state</text>
+  <!-- Welfare state -->
+  <rect class="box soc" x="282" y="286" width="170" height="64" rx="10"/>
+  <text class="nlab" x="367" y="323" text-anchor="middle">Welfare state</text>
 
   <!-- Labour market regulation -->
-  <rect class="box soc" x="496" y="270" width="214" height="64" rx="8"/>
-  <text class="nlab" x="603" y="296" text-anchor="middle">Labour market</text>
-  <text class="nlab" x="603" y="316" text-anchor="middle">regulation</text>
+  <rect class="box soc" x="512" y="220" width="196" height="60" rx="10"/>
+  <text class="nlab" x="610" y="245" text-anchor="middle">Labour market</text>
+  <text class="nlab" x="610" y="264" text-anchor="middle">regulation</text>
 
-  <!-- Health &amp; social care provision -->
-  <rect class="box car" x="496" y="400" width="214" height="64" rx="8"/>
-  <text class="nlab" x="603" y="426" text-anchor="middle">Health &amp; social</text>
-  <text class="nlab" x="603" y="446" text-anchor="middle">care provision</text>
+  <!-- Health & social care provision -->
+  <rect class="box car" x="512" y="358" width="196" height="60" rx="10"/>
+  <text class="nlab" x="610" y="383" text-anchor="middle">Health &amp; social</text>
+  <text class="nlab" x="610" y="402" text-anchor="middle">care provision</text>
 
-  <!-- Mediators -->
-  <rect class="box" x="776" y="176" width="212" height="64" rx="8"/>
-  <text class="nlab" x="882" y="202" text-anchor="middle">Environmental</text>
-  <text class="nlab" x="882" y="222" text-anchor="middle">exposure</text>
+  <!-- Employment conditions -->
+  <rect class="box" x="740" y="220" width="196" height="60" rx="10"/>
+  <text class="nlab" x="838" y="245" text-anchor="middle">Employment</text>
+  <text class="nlab" x="838" y="264" text-anchor="middle">conditions</text>
 
-  <rect class="box" x="776" y="270" width="212" height="64" rx="8"/>
-  <text class="nlab" x="882" y="296" text-anchor="middle">Employment</text>
-  <text class="nlab" x="882" y="316" text-anchor="middle">conditions</text>
+  <!-- Access to health & social care -->
+  <rect class="box" x="740" y="358" width="196" height="60" rx="10"/>
+  <text class="nlab" x="838" y="383" text-anchor="middle">Access to health</text>
+  <text class="nlab" x="838" y="402" text-anchor="middle">&amp; social care</text>
 
-  <rect class="box" x="776" y="400" width="212" height="64" rx="8"/>
-  <text class="nlab" x="882" y="426" text-anchor="middle">Access to health</text>
-  <text class="nlab" x="882" y="446" text-anchor="middle">&amp; social care</text>
+  <!-- Spatial distribution of risk -->
+  <circle cx="1088" cy="318" r="82" fill="#fbeff1" stroke="#8a1a2c" stroke-width="1.6"/>
+  <text class="nlab" x="1088" y="302" text-anchor="middle">Spatial</text>
+  <text class="nlab" x="1088" y="322" text-anchor="middle">distribution</text>
+  <text class="nlab" x="1088" y="342" text-anchor="middle">of risk</text>
 
-  <!-- Risk distribution -->
-  <circle cx="1180" cy="306" r="90" fill="#fbf2f3" stroke="#8a1a2c" stroke-width="1.5"/>
-  <text class="nlab" x="1180" y="288" text-anchor="middle">Population</text>
-  <text class="nlab" x="1180" y="308" text-anchor="middle">distribution of</text>
-  <text class="nlab" x="1180" y="328" text-anchor="middle">risk factors</text>
-
-  <!-- Outcome (directly below the circle) -->
-  <rect x="1090" y="468" width="180" height="84" rx="8" fill="#8a1a2c"/>
-  <text class="nlab" x="1180" y="502" text-anchor="middle" fill="#fff">Health outcomes</text>
-  <text class="nlab" x="1180" y="524" text-anchor="middle" fill="#fff">&amp; equity</text>
+  <!-- Outcome -->
+  <rect x="1008" y="450" width="160" height="74" rx="10" fill="#8a1a2c"/>
+  <text class="nlab" x="1088" y="483" text-anchor="middle" fill="#ffffff">Health outcomes</text>
+  <text class="nlab" x="1088" y="504" text-anchor="middle" fill="#ffffff">&amp; equity</text>
 </svg>
     </div>
-      <p class="model-cap reveal">Political factors shape two things: the welfare state, which takes form as labour market regulation and as the provision of health and social care; and the urban and built environment. Each runs on its own horizontal track to a mediating condition. Employment conditions and environmental exposure shape the population distribution of risk, and so does social care — unpaid care obligations keep people out of work, isolate them, and expose them to hazards of their own. Access to health care works differently: it does not move the distribution of risk, but governs how far that risk is translated into ill health, and so meets the pathway between risk and outcome. Digital and data infrastructure sits above the whole field as a channel of delivery rather than a cause, and the evidence it generates loops back into political decision-making.</p>
+            <p class="model-cap reveal">Health is produced by political choices about how a society organises its institutions. Political factors shape the welfare state, which takes form as labour market regulation and as the provision of health and social care; these act through mediating conditions — employment conditions and access to care — on the spatial distribution of risk that becomes population health and equity. Access works differently from the rest: it does not move the distribution of risk so much as govern how far that risk is translated into ill health, and so meets the pathway between risk and outcome — shifting it through social care, moderating it through health care. Above the whole field sits the Healthy City Atlas, a place-based layer of spatial data and analytics — a channel, not a cause — and the evidence it generates feeds back into policy.</p>
   </div>
 </section>
 <section id="initiatives">
