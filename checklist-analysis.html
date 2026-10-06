@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>자료 분석 순서 점검표 · 계량연구 점검표 묶음</title>
+<meta name="description" content="자료 구조 확인, 변수별 점검, 분포와 정규성, 결측, 기술분석, 모형 설정과 진단, 결과 해석, 민감도 분석">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<!--
+  계량연구 점검표 묶음 · 작성: Claude(Anthropic의 AI) · 기획·검토: 정혜주(고려대학교 보건정책관리학부) · 배포·수정 자유
+  묶음 구성: checklists.html(표지), checklist-survey.html, checklist-analysis.html, checklist-reproducibility.html, checklist-writing.html
+  다섯 파일을 같은 폴더에 두면 서로 연결됨. 각 파일은 양식과 동작을 모두 안에 담고 있어 따로 열어도 작동함.
+  내용 수정: 아래쪽 const S=[...] 안의 문구를 고침. 항목은 ["질문", "판단 기준"] 형식.
+  항목을 절 중간에 넣거나 빼면 저장된 표시가 어긋나므로 PAGE의 key 끝 v1을 v2로 올림.
+-->
+<style>
+/* 계량연구 점검표 묶음 — 공통 양식
+   Layout: 읽기용 단일 단. 위에 묶음 메뉴와 점검 기록란, 항목은 표시 칸 + 질문 + 판단 기준(작은 글씨) 한 줄씩.
+   인쇄 시에는 메뉴·단추를 숨기고 A4 흑백에서도 표시가 보이도록 테두리와 글자로 그림. */
+:root{
+  --bg:#f6f3ee; --surface:#fffdf9; --fg:#2b2a28; --muted:#6d6a64; --line:#d9d3c8;
+  --accent:#8b1e2d; --accent-soft:#f2e2e3; --done:#3e6b46; --on-done:#ffffff;
+  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+}
+@media screen and (prefers-color-scheme: dark){
+  :root{
+    --bg:#1c1b19; --surface:#242321; --fg:#e8e3da; --muted:#a29c92; --line:#3b3934;
+    --accent:#d9737f; --accent-soft:#3a2427; --done:#8fc99a; --on-done:#1c1b19; color-scheme:dark }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.7;margin:0;word-break:keep-all;overflow-wrap:anywhere}
+.wrap{max-width:760px;margin:0 auto;padding-block:36px 80px;padding-inline:20px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* 묶음 메뉴 */
+.series{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin-bottom:22px}
+.series .here{color:var(--fg);font-weight:500}
+.series a{text-decoration:none;border-bottom:1px solid var(--line)}
+.series a:hover{border-bottom-color:var(--accent)}
+
+header{border-bottom:2px solid var(--accent);padding-bottom:20px;margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
+h1{font-weight:700;font-size:28px;line-height:1.35;margin:6px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.meta{color:var(--muted);font-size:13px}
+
+.intro{background:var(--surface);border:1px solid var(--line);padding:16px 18px;margin:0 0 24px;font-size:14px}
+.intro p{margin:0 0 6px}.intro p:last-child{margin:0}
+
+/* 점검 기록 */
+.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;margin:0 0 26px}
+.record .rec-head{grid-column:1/-1;font-size:13px;font-weight:500;color:var(--accent)}
+.record label{display:block;font-size:12.5px;color:var(--muted);min-width:0}
+.record label.wide{grid-column:1/-1}
+.record input{display:block;width:100%;font:inherit;font-size:15px;color:var(--fg);background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:4px 0 5px;margin-top:2px}
+.record input:focus{border-bottom-color:var(--accent)}
+@media (max-width:520px){.record{grid-template-columns:1fr}}
+
+.toc{margin:0 0 22px}
+.toc ol{list-style:none;margin:0;padding:0;column-count:2;column-gap:24px;font-size:13.5px}
+.toc li{break-inside:avoid}
+.toc a{display:flex;gap:10px;padding:3px 0;text-decoration:none;color:var(--fg)}
+.toc a:hover .tt{text-decoration:underline;text-decoration-color:var(--accent)}
+.toc .tn{color:var(--accent);font-variant-numeric:tabular-nums;min-width:1.5em;font-weight:500}
+@media (max-width:520px){.toc ol{column-count:1}}
+
+/* 진행 현황과 단추 */
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;font-size:13px;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.count{font-variant-numeric:tabular-nums;min-width:0}
+.count b{color:var(--fg);font-weight:500}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button.btn{font:inherit;font-size:13px;color:var(--accent);background:none;border:1px solid var(--line);padding:5px 12px;cursor:pointer;border-radius:0}
+button.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button.btn:hover{border-color:var(--accent)}
+.legend{font-size:12.5px;color:var(--muted);margin:10px 0 26px}
+
+section{margin-bottom:36px;scroll-margin-top:64px}
+@media (max-width:520px){section{scroll-margin-top:112px}}
+h2{font-weight:700;font-size:18px;margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;font-size:15px;font-weight:500}
+.lead{color:var(--muted);font-size:13px;margin:0 0 10px}
+.group{font-weight:500;font-size:14px;margin:18px 0 2px;color:var(--accent)}
+
+.item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:start}
+.item.first{border-top:none}
+.item.sub{margin-left:22px;border-top-style:dashed}
+.item.plain{grid-template-columns:minmax(0,1fr)}
+.tick{width:18px;height:18px;margin:5px 0 0;padding:0;border:1.5px solid var(--muted);border-radius:2px;background:var(--surface);color:var(--fg);font:700 13px/1 var(--body);display:grid;place-items:center;cursor:pointer}
+.item[data-s="y"] .tick{background:var(--done);border-color:var(--done);color:var(--on-done)}
+.item[data-s="n"] .tick{background:var(--line);border-color:var(--muted);color:var(--fg)}
+.body{min-width:0}
+.q{cursor:pointer}
+.item.plain .q{cursor:auto}
+.na-tag{display:none;font-size:11.5px;line-height:1.5;border:1px solid var(--muted);color:var(--muted);padding:0 6px;margin-left:8px;white-space:nowrap;vertical-align:1px}
+.item[data-s="n"] .na-tag{display:inline-block}
+.note{display:block;color:var(--muted);font-size:13px;line-height:1.65;margin-top:3px}
+.item[data-s="y"] .q{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--done)}
+.item[data-s="n"] .q{color:var(--muted)}
+code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);color:var(--fg);padding:0 4px;border-radius:2px;word-break:normal}
+.gate{background:var(--accent-soft);border-left:3px solid var(--accent);padding:12px 16px;margin-top:16px;font-size:14px}
+
+/* 비고 */
+.memo{margin-top:8px}
+.memo h2{margin-bottom:4px}
+.memo textarea{display:block;width:100%;min-height:120px;font:inherit;font-size:14px;line-height:1.7;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:0;padding:10px 12px;resize:vertical}
+.memo-print{display:none;white-space:pre-wrap;font-size:14px;border:1px solid var(--line);padding:10px 12px;min-height:60px}
+
+.bottom{display:flex;justify-content:flex-end;margin-top:24px}
+footer{margin-top:36px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 4px}
+.print-only{display:none}
+.date-print{display:none}
+
+/* 표지 */
+.set{list-style:none;margin:0 0 34px;padding:0;counter-reset:set}
+.set li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;padding:18px 0;border-top:1px solid var(--line)}
+.set li:last-child{border-bottom:1px solid var(--line)}
+.set .no{color:var(--accent);font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;padding-top:3px}
+.set .name{font-size:19px;font-weight:700;line-height:1.4;text-decoration:none;color:var(--fg)}
+.set .name:hover{color:var(--accent)}
+.set .when{font-size:13px;color:var(--accent);font-weight:500;margin-top:2px}
+.set .desc{font-size:14px;margin-top:4px}
+.set .stat{font-size:12.5px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.set .stat b{color:var(--fg);font-weight:500}
+h2.plainh{display:block;font-size:17px;margin:0 0 8px}
+.howto{margin:0 0 30px;padding-left:1.3em;font-size:14.5px}
+.howto li{margin-bottom:4px;padding-left:2px}
+
+@media (prefers-reduced-motion:no-preference){.q{transition:color .15s}}
+
+/* 인쇄(PDF 저장) */
+@page{size:A4;margin:16mm 15mm 18mm;@bottom-center{content:counter(page) " / " counter(pages);font-family:"Noto Sans KR",sans-serif;font-size:8pt;color:#6d6a64}}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt;line-height:1.6}
+  .wrap{max-width:none;padding:0}
+  .series,.toc,.btns,.legend,.bottom,.screen-only{display:none!important}
+  .print-only{display:block}
+  header{padding-bottom:10pt;margin-bottom:14pt}
+  h1{font-size:19pt}
+  .intro{background:none;font-size:9.5pt;padding:8pt 10pt;margin-bottom:14pt}
+  .record{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:14pt}
+  .record input{font-size:10.5pt;border-bottom:.6pt solid #2b2a28}
+  .record input[type=date]{display:none}
+  .date-print{display:block;font-size:10.5pt;color:var(--fg);border-bottom:.6pt solid #2b2a28;padding:4px 0 5px;margin-top:2px;min-height:1.9em}
+  .tools{position:static;background:none;border-color:#2b2a28;padding:6pt 0;margin-bottom:14pt;font-size:9.5pt;color:#2b2a28}
+  section{margin-bottom:16pt}
+  h2{font-size:13pt;break-after:avoid}
+  .lead,.group{break-after:avoid}
+  .lead{font-size:9pt}
+  .item{break-inside:avoid;padding:5pt 0;grid-template-columns:16pt minmax(0,1fr);gap:7pt}
+  .item.plain{grid-template-columns:minmax(0,1fr)}
+  .tick{width:11pt;height:11pt;margin-top:3pt;border:.9pt solid #2b2a28!important;background:#fff!important;color:#000!important;font-size:9.5pt}
+  .item[data-s="y"] .q,.item[data-s="n"] .q{color:var(--fg);text-decoration:none}
+  .na-tag{border-color:#2b2a28;color:#2b2a28;font-size:8pt}
+  .note{font-size:9pt;line-height:1.55;color:#55524d}
+  code{background:none;padding:0}
+  .gate{background:none;border:.6pt solid #2b2a28;border-left:2.5pt solid var(--accent);padding:7pt 10pt;font-size:10pt;break-inside:avoid}
+  .memo textarea{display:none}
+  .memo-print{display:block;font-size:10pt}
+  .memo{break-inside:avoid;margin-top:22pt}
+  footer{font-size:8.5pt;margin-top:18pt}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="series" aria-label="점검표 묶음"><a href="checklists.html">점검표 묶음</a><a href="checklist-survey.html">설문조사 설계·수행 점검표</a><span class="here" aria-current="page">자료 분석 순서 점검표</span><a href="checklist-reproducibility.html">분석 재현성 점검표</a><a href="checklist-writing.html">논문 작성 점검표</a></nav>
+<header>
+  <div class="eyebrow">Analysis workflow checklist</div>
+  <h1>자료 분석 순서 점검표</h1>
+  <div class="meta">분석 계획에서 표를 확정하기까지, 무엇을 어떤 순서로 확인하는가 · 2026. 9. · 기획·검토 정혜주(고려대 보건정책관리학부) · 작성 Claude</div>
+</header>
+
+<div class="intro"><p>2차자료 또는 직접 수집한 설문자료의 계량분석에 적용합니다. 위에서 아래로 순서대로 진행하며, 앞 단계를 건너뛰고 회귀모형부터 돌리지 않습니다.</p><p>각 항목 아래 작은 글씨는 판단 기준입니다. 기준을 기계적으로 적용하기보다, 그 확인이 왜 필요한지 이해하고 자기 자료에 맞게 판단합니다.</p><p>설문조사의 설계와 수행은 「<a href="checklist-survey.html">설문조사 설계·수행 점검표</a>」에서, 코드·파일 관리와 독립 재현은 「<a href="checklist-reproducibility.html">분석 재현성 점검표</a>」에서, 원고 서술은 「<a href="checklist-writing.html">논문 작성 점검표</a>」에서 다룹니다.</p></div>
+
+<form class="record" id="record" onsubmit="return false" aria-label="점검 기록">
+  <div class="rec-head">점검 기록</div>
+  <label class="wide" for="rec-title">논문·과제명<input id="rec-title" type="text" autocomplete="off"></label>
+  <label for="rec-name">점검자<input id="rec-name" type="text" autocomplete="off"></label>
+  <label for="rec-date">점검일<input id="rec-date" type="date"><span class="date-print" id="rec-date-print"></span></label>
+</form>
+
+<nav class="toc" aria-label="절 목록"><ol id="toc"></ol></nav>
+
+<div class="tools">
+  <div class="count" id="count" aria-live="polite"></div>
+  <div class="btns"><button type="button" class="btn primary" data-print>PDF로 저장·인쇄</button><button type="button" class="btn" id="reset">표시 지우기</button></div>
+</div>
+<p class="legend">네모를 한 번 누르면 확인(✓), 한 번 더 누르면 해당 없음(–), 다시 누르면 비워집니다. 인쇄 창에서 대상을 「PDF로 저장」으로 고르면 표시한 상태 그대로 PDF가 됩니다.</p>
+
+<div id="list"></div>
+
+<section class="memo">
+  <h2>비고</h2>
+  <p class="lead">확인하지 못한 항목과 그 사유, 지도교수에게 알릴 사항</p>
+  <textarea id="memo" aria-label="비고"></textarea>
+  <div class="memo-print" id="memo-print"></div>
+</section>
+
+<div class="bottom"><button type="button" class="btn primary" data-print>PDF로 저장·인쇄</button></div>
+
+<footer>
+  <p class="screen-only">표시와 기록은 이 브라우저에만 저장되며 다른 사람에게 보이지 않습니다. 남겨야 하는 점검 결과는 PDF로 저장해 둡니다.</p>
+  <p>이 점검표는 Claude(Anthropic의 AI)가 <a href="https://hpolicy.korea.ac.kr/">정혜주</a>(고려대학교 보건정책관리학부)의 기획과 검토 아래 작성하고 문헌과 대조했습니다. 배포·수정 자유.</p>
+  <p class="print-only" id="stamp"></p>
+</footer>
+</div>
+<script>
+const PAGE={"key": "hpolicy-checklist-analysis-v1", "title": "자료 분석 순서 점검표"};
+const S=[
+ {
+  "t": "분석 계획",
+  "lead": "자료를 열기 전에 확정함",
+  "items": [
+   [
+    "연구질문을 한 문장으로 쓰고, 그 질문이 기술(분포·추세), 예측, 인과 추론 가운데 어느 것인지 정하였는가",
+    "목적에 따라 공변량 선택과 해석 방식이 달라짐. 인과 질문이면 무엇과 무엇을 비교하는지부터 정함"
+   ],
+   [
+    "종속변수, 주요 설명변수, 공변량의 역할을 정하고, 각 공변량이 교란요인인지 매개변수나 충돌변수인지 구분하였는가",
+    "주요 설명변수의 결과로 생기는 변수(매개변수)를 보정하면 추정치가 더 이상 총효과가 아님. 대개 0 쪽으로 치우치나 반대 방향도 가능함. 설명변수와 종속변수 둘 다의 결과인 변수(충돌변수)도 보정하지 않음. 변수 간 관계를 그림(DAG)으로 그려 지도교수와 확인함"
+   ],
+   [
+    "분석 단위(개인, 개인-시점, 가구, 지역)와 분석 대상의 포함·제외 기준을 정하였는가",
+    ""
+   ],
+   [
+    "주분석, 하위집단 분석, 민감도 분석을 미리 구분해 적어 두었는가",
+    "자료를 본 뒤에 추가한 분석은 탐색적 분석으로 표시함"
+   ],
+   [
+    "관심 있는 효과를 탐지할 만큼 표본과 사건 수가 충분한지 가늠하였는가",
+    "2차자료는 표본이 이미 정해져 있으므로, 하위집단별 사례 수와 종속변수의 사건 수를 먼저 확인함"
+   ]
+  ]
+ },
+ {
+  "t": "자료 구조 확인",
+  "lead": "변수를 만들기 전에 자료가 어떻게 생겼는지부터 봄",
+  "items": [
+   [
+    "한 행이 무엇을 뜻하는지(개인, 개인-시점, 가구) 확인하고, 식별변수가 고유한지 점검하였는가",
+    "Stata는 <code>isid<\/code> 또는 <code>duplicates report<\/code>. 고유해야 할 ID가 중복되면 병합 오류임"
+   ],
+   [
+    "파일을 병합할 때마다 일치·불일치 건수를 확인하고 기록하였는가",
+    "불일치 사례가 왜 생겼는지 설명할 수 있어야 함"
+   ],
+   [
+    "표본설계(층화, 집락, 가중치)를 이용자 가이드에서 확인하였는가",
+    "가중치의 종류(횡단·종단)와 어느 분석에 어느 것을 쓰는지 정함. 쓰지 않기로 했으면 이유를 적음"
+   ],
+   [
+    "패널자료는 파동별 응답자 수, 신규 표본 추가, 탈락(사망·거절·추적 실패) 규모를 표로 만들었는가",
+    ""
+   ],
+   [
+    "자료의 위계(개인이 가구·지역에 속함, 반복측정이 개인에 속함)를 파악하였는가",
+    "같은 집단에 속한 관측은 서로 독립이 아니므로 모형 단계에서 반영해야 함"
+   ],
+   [
+    "직접 수집한 설문자료는 응답 정제(중복·불성실 응답 처리)와 응답자 구성의 모집단 대조를 마쳤는가",
+    "「<a href=\"checklist-survey.html\">설문조사 설계·수행 점검표<\/a>」의 자료 입력과 정제, 표본의 대표성과 측정의 질 절을 따름"
+   ]
+  ]
+ },
+ {
+  "t": "변수별 점검",
+  "lead": "분석에 쓰는 모든 변수를 하나씩 봄",
+  "items": [
+   [
+    "모든 분석 변수의 빈도표 또는 요약통계를 결측을 포함해 출력하였는가",
+    "범주형은 <code>tab x, missing<\/code>, 연속형은 <code>summarize x, detail<\/code>. <code>codebook<\/code>으로 값의 범위와 고유값 수를 확인함"
+   ],
+   [
+    "최솟값과 최댓값이 가능한 범위 안에 있는가",
+    "범위를 벗어나는 값은 결측코드(−9, 999 등)이거나 코딩 오류임"
+   ],
+   [
+    "연속형 변수는 히스토그램(또는 상자그림)을 그려 분포의 모양을 눈으로 보았는가",
+    "평균과 표준편차만으로는 치우침, 쌍봉, 0에 몰림, 바닥·천장 효과를 알 수 없음"
+   ],
+   [
+    "이상값을 확인하고 입력 오류인지 실제 값인지 판단하였는가",
+    "실제 값이면 기계적으로 삭제하지 않음. 포함한 결과와 제외한 결과를 비교하고 처리 기준을 방법에 씀"
+   ],
+   [
+    "범주형 변수에 사례가 매우 적은 범주가 있는지 확인하였는가",
+    "범주를 합칠 때는 의미상 합칠 수 있는 범주끼리 합치고, 합친 사실과 이유를 기록함"
+   ],
+   [
+    "파생변수(합산 점수, 범주화, 지표)는 만든 직후 원변수와 교차표로 대조하였는가",
+    "세부 항목은 「<a href=\"checklist-reproducibility.html\">분석 재현성 점검표<\/a>」의 변수 생성 절을 따름"
+   ]
+  ]
+ },
+ {
+  "t": "분포와 정규성",
+  "lead": "검정부터 돌리지 않고, 무엇을 위해 확인하는지부터 정함",
+  "items": [
+   [
+    "정규성 가정이 무엇에 대한 가정인지 구분하였는가",
+    "선형회귀의 정규성 가정은 원변수가 아니라 잔차(오차)에 대한 것임. 설명변수는 정규분포일 필요가 없음. 종속변수 자체가 치우쳐 있어도 잔차는 정규에 가까울 수 있으므로, 잔차 확인은 모형 진단 단계에서 함"
+   ],
+   [
+    "종속변수의 측정 유형과 알고 싶은 양에 맞는 모형 계열을 정하였는가",
+    "연속형은 선형, 이분형은 로지스틱, 횟수·계수는 포아송·음이항, 순서형은 순서형 로지스틱, 사건까지의 시간은 생존분석. 분포가 치우쳤다는 이유만으로 선형모형을 버리지 않음. 0이 많거나 상·하한에 몰린 점수는 평균의 차이가 질문에 맞는 요약인지부터 판단함"
+   ],
+   [
+    "정규성을 검정 하나로 판단하지 않고 그림과 함께 보았는가",
+    "히스토그램, Q–Q 그림, 왜도·첨도를 함께 봄. Shapiro–Wilk 등 정규성 검정은 표본이 크면 사소한 이탈에도 유의하게 나오고, 표본이 작으면 큰 이탈도 놓침. 정규성 검정 결과에 따라 본 분석의 방법을 바꾸지 않고, 분석 방법은 미리 정함"
+   ],
+   [
+    "표본 크기에 비추어 정규성이 얼마나 중요한지 판단하였는가",
+    "계수의 점추정은 정규성과 무관함. 표본이 충분히 크면 검정과 신뢰구간도 잔차의 비정규성에 비교적 강건함(중심극한정리). 다만 영향력 큰 이상값이 있거나 분포가 심하게 치우치면 더 큰 표본이 필요함. 표본이 작거나 개별 예측구간을 제시할 때는 중요해짐. 대표본에서는 함수형태, 관측의 독립성, 등분산성이 결과에 더 큰 영향을 줌"
+   ],
+   [
+    "요약통계를 분포에 맞게 골랐는가",
+    "대칭에 가까우면 평균(표준편차), 치우쳐 있으면 중앙값(사분위수). 소득, 이용 횟수는 대개 후자임. 의료비처럼 총량이 정책적 관심이면 치우쳐 있어도 평균을 함께 제시함"
+   ],
+   [
+    "집단 비교 검정을 자료의 성격에 맞게 골랐는가",
+    "연속형 두 집단은 Welch t검정을 기본으로 함(등분산 검정 결과로 고르지 않음). 분포가 심하게 치우치고 표본이 작으면 Mann–Whitney를 쓰되, 이 검정은 중앙값의 차이가 아니라 분포 전체의 차이를 봄. 세 집단 이상은 분산분석 또는 Kruskal–Wallis. 범주형은 카이제곱, 기대빈도 5 미만인 셀이 20%를 넘거나 1 미만인 셀이 있으면 Fisher 정확검정(어림 기준임)"
+   ],
+   [
+    "변환(로그 등)을 하기 전에 해석이 어떻게 바뀌는지 확인하였는가",
+    "로그 변환한 종속변수의 계수는 기하평균의 비(대략 비율 변화)로 해석되며 산술평균의 변화가 아님. 0이 있는 변수에 임의의 상수를 더해 로그를 취하면 결과가 그 상수와 측정 단위에 따라 달라짐. 평균에 대한 효과가 관심이면 로그 연결 일반화선형모형(포아송·감마)을 함께 검토함"
+   ]
+  ]
+ },
+ {
+  "t": "결측 분석",
+  "items": [
+   [
+    "변수별 결측률과 결측이 함께 나타나는 양상을 표로 만들었는가",
+    "Stata는 <code>misstable summarize<\/code>, <code>misstable patterns<\/code>"
+   ],
+   [
+    "완전사례만 남겼을 때 표본이 얼마나 줄어드는지 확인하였는가",
+    "변수마다 결측률이 낮아도 여러 변수를 함께 쓰면 손실이 커짐"
+   ],
+   [
+    "분석에 포함된 사례와 결측으로 제외된 사례의 특성을 비교하였는가",
+    "차이가 있으면 완전무작위 결측이 아님. 완전사례 분석의 편향 여부는 결측이 공변량을 고려한 뒤에도 종속변수와 관련되는지에 달려 있으며, 차이가 없어 보여도 편향이 없다는 증거는 아님. 비교표는 보충자료에 넣음"
+   ],
+   [
+    "결측이 생긴 이유에 대한 가정(완전무작위, 무작위, 비무작위)을 적고 그에 맞는 처리 방법을 골랐는가",
+    "완전사례 분석, 다중대체, 완전정보 최대우도, 역확률가중 가운데 선택하고 근거를 씀. 무작위 결측과 비무작위 결측은 관측 자료로 구분할 수 없고 다중대체·최대우도·역확률가중은 모두 무작위 결측을 전제하므로, 가정을 바꾼 민감도 분석을 함께 함. 평균 대체나 「결측」 범주 추가는 편향을 만들 수 있어 권장되지 않음"
+   ],
+   [
+    "패널자료는 탈락한 사람과 남은 사람의 기준 시점 특성을 비교하였는가",
+    "탈락이 종속변수와 관련되면(예: 건강이 나쁜 사람이 더 많이 탈락) 남은 사람만으로 추정한 추세가 왜곡됨. 관측된 이전 값으로 설명되는 탈락은 모든 관측치를 쓰는 모형이나 가중으로 보정할 수 있으나, 그렇지 않은 탈락은 민감도 분석이 필요함"
+   ]
+  ]
+ },
+ {
+  "t": "기술분석",
+  "lead": "표 1을 만드는 단계",
+  "items": [
+   [
+    "분석 대상이 확정된 뒤에 그 표본으로 기술통계를 냈는가",
+    "기술통계의 N과 모형의 N이 다르면 이유를 설명할 수 있어야 함"
+   ],
+   [
+    "전체와 주요 비교 집단(노출군·비노출군 등)별로 특성을 제시하였는가",
+    ""
+   ],
+   [
+    "연속형은 평균(표준편차) 또는 중앙값(사분위범위), 범주형은 빈도(%)로 제시하고 변수별 결측 수를 밝혔는가",
+    ""
+   ],
+   [
+    "가중치를 쓰는 연구는 가중하지 않은 사례 수와 가중한 비율·평균을 함께 제시하였는가",
+    ""
+   ],
+   [
+    "표 1에 집단 간 p값을 넣을지 결정하였는가",
+    "관찰연구 보고지침(STROBE)의 해설서는 기술표의 유의성 검정을 피하라고 함. 표본이 크면 의미 없는 차이도 유의하게 나옴. 학술지 관행상 필요하면 넣되, 차이의 크기는 표준화 차이로 보는 편이 나음"
+   ],
+   [
+    "종속변수의 분포를 주요 설명변수의 수준별로 기술하였는가",
+    "보정하기 전 자료에서 관계가 어떻게 보이는지를 확인함. 분석 계획을 확정한 뒤에 보고, 이 결과를 보고 가설이나 공변량을 바꾸면 그 사실을 밝힘"
+   ],
+   [
+    "종단자료는 시점별 기술통계와 개인별 변화 그림을 확인하였는가",
+    "시점별 평균과 응답자 수를 표로 만들고, 일부 표본의 개인 궤적을 그려 평균 뒤에 가려진 변화 양상을 봄"
+   ]
+  ]
+ },
+ {
+  "t": "이변량 분석",
+  "items": [
+   [
+    "주요 설명변수와 종속변수의 보정 전 관련성을 추정하였는가",
+    "보정 후 추정치와 비교하기 위한 기준임. 보정 후 방향이 뒤집히거나 크기가 크게 달라지면 어느 변수 때문인지 확인함. 오즈비 등은 교란이 없어도 보정 전후 값이 달라질 수 있으므로 변화 전부를 교란으로 해석하지 않음"
+   ],
+   [
+    "연속형 변수 사이의 관계가 직선인지 산점도(평활선 포함)로 확인하였는가",
+    "곡선이면 스플라인이나 제곱항을 먼저 검토함. 범주화는 근거 있는 절단점이 있을 때만 씀"
+   ],
+   [
+    "설명변수끼리의 상관을 확인하였는가",
+    "상관이 매우 높은 변수를 함께 넣으면 계수가 불안정해짐"
+   ],
+   [
+    "이변량 검정의 유의성만으로 공변량을 고르지 않았는가",
+    "「단변량에서 p&lt;0.05인 변수만 투입」은 교란요인을 빠뜨릴 수 있음. 단계적 선택법처럼 자료를 보고 변수를 고르면 표준오차와 p값이 실제보다 작게 나오고 남은 변수의 계수는 과대추정됨. 공변량은 이론과 선행연구에 근거해 미리 정함"
+   ]
+  ]
+ },
+ {
+  "t": "모형 설정",
+  "items": [
+   [
+    "종속변수의 형태와 자료 구조에 맞는 모형을 골랐는가",
+    "반복측정·군집 자료는 혼합(다수준)모형, 일반화추정방정식, 고정효과모형, 군집 표준오차 가운데 연구질문에 맞는 것을 고름. 독립 관측을 가정한 모형에 그대로 넣지 않음"
+   ],
+   [
+    "모형을 단계적으로 쌓아 계수의 변화를 확인하였는가",
+    "보정 전, 인구사회학적 변수 보정, 완전 보정 순으로 추정함. 단계마다 표본이 같아야 비교할 수 있음. 로지스틱·Cox 모형은 변수를 추가하면 교란이 없어도 계수가 달라지므로, 단계 간 변화를 곧바로 교란이나 매개의 크기로 해석하지 않음"
+   ],
+   [
+    "연속형 설명변수의 함수형태를 확인하였는가",
+    "연속형 변수는 연속형으로 두는 것이 원칙임. 범주로 나누면 정보가 손실되고 절단점에 따라 결과가 달라짐. 범주화가 필요하면 임상·정책 기준에 따른 절단점을 쓰고, 자료에서 결과가 가장 잘 나오는 절단점을 찾아 쓰지 않음"
+   ],
+   [
+    "범주형 변수의 기준 범주를 해석하기 쉽고 사례 수가 충분한 범주로 정하였는가",
+    ""
+   ],
+   [
+    "상호작용항은 사전 가설이 있는 것만 넣었는가",
+    "하위집단별로 따로 추정해 유의성 유무를 비교하는 것으로는 효과가 다르다고 말할 수 없음. 상호작용항을 검정함"
+   ],
+   [
+    "표본 크기에 비해 추정할 모수가 너무 많지 않은가",
+    "이분형 결과는 사건 수(적은 쪽 범주)가 기준임. 모수는 변수 개수가 아니라 추정하는 계수의 수(범주 더미, 상호작용항 포함)로 셈. 모수당 사건 10건은 근거가 약한 어림 기준이며, 필요한 사건 수는 표본 크기와 모형의 목적에 따라 달라짐. 사건이 적으면 변수를 줄이거나 벌점화 추정(Firth 등)을 씀"
+   ],
+   [
+    "가중치, 층, 집락을 모형에 반영할지 정하고 방법에 밝혔는가",
+    "Stata는 <code>svyset<\/code> 후 <code>svy:<\/code> 접두어"
+   ]
+  ]
+ },
+ {
+  "t": "모형 진단",
+  "lead": "추정한 뒤에 가정을 확인함. 쓰는 모형에 해당하는 묶음만 점검함",
+  "groups": [
+   {
+    "g": "선형회귀",
+    "items": [
+     [
+      "잔차 대 적합값 그림으로 선형성과 등분산성을 확인하였는가",
+      "부채꼴이면 이분산임. 함수형태와 누락변수를 먼저 다시 보고, 강건 표준오차를 쓰거나 모형을 바꿈"
+     ],
+     [
+      "잔차의 Q–Q 그림을 확인하였는가",
+      "정규성은 이 단계에서 잔차로 확인함"
+     ],
+     [
+      "분산팽창지수(VIF)로 다중공선성을 확인하였는가",
+      "10 이상을 문제로 보는 관행이 있으나 근거가 약한 어림 기준임. VIF가 높다는 이유만으로 교란요인을 빼지 않음. 주요 설명변수의 표준오차가 얼마나 커지는지를 봄. 상호작용항·제곱항 때문에 생긴 높은 VIF는 문제가 아님"
+     ],
+     [
+      "영향력이 큰 관측(Cook 거리, dfbeta)을 확인하고, 제외해도 결론이 유지되는지 보았는가",
+      ""
+     ]
+    ]
+   },
+   {
+    "g": "로지스틱·계수 모형",
+    "items": [
+     [
+      "완전분리나 희소 셀 때문에 계수와 표준오차가 비정상적으로 크지 않은가",
+      "전체 표본이 커도 설명변수·결과·공변량 조합의 칸에 사례가 거의 없으면 오즈비가 실제보다 크게 추정됨(희소 자료 편향). 오즈비가 수십 이상이거나 신뢰구간이 극단적으로 넓으면 교차표를 확인하고, 범주 병합이나 벌점화 추정(Firth 등)을 씀"
+     ],
+     [
+      "연속형 설명변수와 로짓 사이의 선형성을 확인하였는가",
+      ""
+     ],
+     [
+      "횟수 자료는 과대산포와 영과잉을 확인하였는가",
+      "과대산포는 공변량을 넣은 모형에서 판단함. 과대산포가 있으면 음이항모형 또는 강건 표준오차를 쓴 포아송모형을 씀. 0이 많다는 이유만으로 영과잉 모형을 쓰지 않고, 0일 수밖에 없는 집단이 이론적으로 있는지를 먼저 따짐"
+     ],
+     [
+      "결과가 드물지 않은 경우 오즈비를 상대위험도(risk ratio)처럼 해석하지 않았는가",
+      "결과 비율이 높을수록, 오즈비가 1에서 멀수록 오즈비는 상대위험도보다 과장됨. 10%는 관행적 어림 기준임. 상대위험도가 필요하면 강건 분산을 쓴 포아송모형 또는 로그이항모형을 씀"
+     ]
+    ]
+   },
+   {
+    "g": "생존분석",
+    "items": [
+     [
+      "비례위험 가정을 확인하였는가",
+      "Schoenfeld 잔차 그림과 검정, 로그-로그 생존곡선을 함께 보고 검정의 p값만으로 판단하지 않음. 위배되면 시간과의 상호작용이나 층화를 검토함"
+     ],
+     [
+      "중도절단이 결과와 무관하다고 볼 근거를 검토하였는가",
+      ""
+     ]
+    ]
+   },
+   {
+    "g": "다수준·종단 모형",
+    "items": [
+     [
+      "공변량이 없는 빈 모형에서 집단 내 상관(ICC)을 확인하였는가",
+      ""
+     ],
+     [
+      "임의효과 구조(임의절편, 임의기울기)를 근거를 갖고 정하였으며 모형이 수렴하였는가",
+      "수렴 경고가 뜬 결과를 그대로 쓰지 않음"
+     ],
+     [
+      "시간의 함수형태(선형, 이차, 구간별)를 자료의 평균 궤적과 비교해 정하였는가",
+      ""
+     ]
+    ]
+   },
+   {
+    "g": "잠재집단·궤적 모형",
+    "items": [
+     [
+      "집단 수를 정보지수(BIC 등)만이 아니라 분류 정확도, 최소 집단 크기, 해석 가능성을 함께 보고 정하였는가",
+      "집단별 평균 사후확률 0.7 이상, 올바른 분류의 오즈(OCC) 5 이상이 통상 기준임. 집단 비율 5% 이상은 관행적 기준으로 1차 문헌의 근거가 약하므로, 비율과 함께 절대 사례 수를 봄. 어느 한 지표로 정하지 않음"
+     ],
+     [
+      "초기값을 바꿔 여러 번 추정해도 같은 해에 도달하는가",
+      ""
+     ],
+     [
+      "비교한 모든 모형의 적합도를 표로 제시할 수 있는가",
+      "궤적 연구 보고지침(GRoLTS)의 항목을 따름"
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "t": "결과 해석",
+  "items": [
+   [
+    "효과크기와 95% 신뢰구간을 중심으로 해석하였는가",
+    "p값은 효과의 크기나 중요성을 말해 주지 않음"
+   ],
+   [
+    "계수의 의미를 실제 단위로 풀어 쓸 수 있는가",
+    "「설명변수가 1단위 늘 때 종속변수가 얼마 변한다」를 실제 단위로 쓰고, 그 크기가 실질적으로 의미 있는지 판단함"
+   ],
+   [
+    "유의하지 않은 결과를 「차이 없음」, 「효과 없음」으로 쓰지 않았는가",
+    "신뢰구간이 넓으면 효과가 있을 가능성도 배제하지 못함"
+   ],
+   [
+    "공변량의 계수를 각각의 인과효과처럼 해석하지 않았는가",
+    "모형은 주요 설명변수의 효과를 추정하도록 짠 것임. 공변량 계수는 주요 설명변수를 거치는 경로가 빠진 직접효과에 해당하고, 그 공변량 자체의 교란요인은 보정되어 있지 않을 수 있음(이른바 Table 2 fallacy)"
+   ],
+   [
+    "검정을 여러 번 한 경우 우연히 유의하게 나왔을 가능성을 고려하였는가",
+    "하위집단 분석과 여러 결과변수 분석은 사전 계획 여부를 밝히고, 필요하면 다중비교를 보정함"
+   ],
+   [
+    "연구 목적, 결과 표현, 정책 제언에 담긴 인과의 강도가 서로 맞는가",
+    "목적이 인과 추론이면 그렇다고 밝히고 필요한 가정과 그 가정이 깨질 가능성을 씀. 「관련이 있다」로 바꿔 쓰는 것만으로는 해결되지 않음. 관련성으로 서술한 결과에서 인과를 전제한 정책 제언을 끌어내지 않음. 횡단자료나 단순 보정 모형이면 역인과와 미측정 교란을 구체적으로 검토함"
+   ],
+   [
+    "결과가 선행연구나 이론과 어긋나면 해석하기 전에 코드와 변수 코딩부터 다시 확인하였는가",
+    "예상과 반대 방향의 결과는 새로운 발견일 수도, 코딩 오류에서 나온 것일 수도 있음. 예상과 일치하는 결과도 같은 강도로 점검함. 어긋날 때만 점검하면 기대에 맞는 오류는 남음"
+   ]
+  ]
+ },
+ {
+  "t": "민감도 분석",
+  "items": [
+   [
+    "주요 분석 결정을 바꿔도 결론이 유지되는지 확인하였는가",
+    "절단값, 범주 병합, 결측 처리 방식, 표본 제한 기준, 공변량 구성, 모형 계열이 대상임"
+   ],
+   [
+    "결과에 영향을 줄 수 있는 특정 시기나 집단을 제외한 분석을 하였는가",
+    "예: 조사 방식이나 문항이 바뀐 파동, 코로나19 시기, 추적 기간이 짧은 사례"
+   ],
+   [
+    "미측정 교란이 결론을 뒤집으려면 얼마나 강해야 하는지 가늠하였는가",
+    "E-value 등. 수치만 제시하지 않고, 해당 분야에서 알려진 교란요인이 가질 만한 관련성의 크기와 견주어 해석함. E-value는 선택 편향과 측정 오차는 다루지 않음"
+   ],
+   [
+    "민감도 분석 결과를 주분석과 나란히 비교할 수 있는 표로 정리하였는가",
+    "결론이 달라지는 경우도 빼지 않고 보고함"
+   ]
+  ]
+ },
+ {
+  "t": "표를 확정하기 전",
+  "items": [
+   [
+    "기술통계, 모형, 그림의 N이 서로 맞는가",
+    ""
+   ],
+   [
+    "로그 파일을 처음부터 끝까지 읽고 경고·오류 메시지를 확인하였는가",
+    ""
+   ],
+   [
+    "「분석 재현성 점검표」의 표본 정의, 변수 생성, 독립 재현 절을 마쳤는가",
+    ""
+   ]
+  ],
+  "gate": "이 세 가지가 확인되지 않았으면 표를 원고에 옮기지 않음"
+ }
+];
+</script>
+<script>
+/* 계량연구 점검표 묶음 — 공통 동작
+   각 점검표 쪽은 이 파일을 부르기 전에 PAGE(= {key, title})와 S(= 절·항목 자료)를 정의함.
+   표시 상태는 브라우저의 localStorage에만 저장됨(서버로 전송되지 않음). */
+(function(){
+  "use strict";
+  var LABEL={"":"미확인","y":"확인함","n":"해당 없음"}, MARK={"":"","y":"✓","n":"–"}, NEXT={"":"y","y":"n","n":""};
+  var store={items:{},rec:{},memo:""};
+  try{var raw=JSON.parse(localStorage.getItem(PAGE.key)||"null");if(raw&&typeof raw==="object"){store.items=raw.items||{};store.rec=raw.rec||{};store.memo=raw.memo||""}}catch(e){}
+  function save(){try{localStorage.setItem(PAGE.key,JSON.stringify(store))}catch(e){}}
+
+  var total=0;
+  function row(it,id,sub,plain,first){
+    var q=Array.isArray(it)?it[0]:it, n=Array.isArray(it)?it[1]:"";
+    var cls=(sub?" sub":"")+(first?" first":"");
+    if(plain){return '<div class="item plain'+cls+'"><div class="body"><span class="q">'+q+'</span>'+(n?'<span class="note">'+n+'</span>':'')+'</div></div>'}
+    total++;
+    var s=store.items[id]||"";
+    return '<div class="item'+cls+'" data-k="'+id+'" data-s="'+s+'">'+
+      '<button type="button" class="tick" id="'+id+'" aria-label="'+LABEL[s]+'" aria-describedby="'+id+'q">'+MARK[s]+'</button>'+
+      '<div class="body"><span class="q" id="'+id+'q">'+q+'</span><span class="na-tag">해당 없음</span>'+(n?'<span class="note">'+n+'</span>':'')+'</div></div>';
+  }
+  var out="",toc="";
+  S.forEach(function(s,i){
+    var sid="s"+(i+1);
+    toc+='<li><a href="#'+sid+'"><span class="tn">'+(i+1)+'</span><span class="tt">'+s.t+'</span></a></li>';
+    out+='<section id="'+sid+'"><h2><span class="n">'+(i+1)+'</span>'+s.t+'</h2>';
+    if(s.lead)out+='<p class="lead">'+s.lead+'</p>';
+    if(s.groups){s.groups.forEach(function(g,gi){out+='<div class="group">'+g.g+'</div>';g.items.forEach(function(it,k){out+=row(it,sid+"g"+(gi+1)+"i"+(k+1),true,false,k===0)})})}
+    else s.items.forEach(function(it,k){out+=row(it,sid+"i"+(k+1),false,s.plain,k===0)});
+    if(s.gate)out+='<div class="gate">'+s.gate+'</div>';
+    out+='</section>';
+  });
+  var $=function(id){return document.getElementById(id)};
+  $("toc").innerHTML=toc;
+  $("list").innerHTML=out;
+
+  function count(){
+    var y=0,n=0;Object.keys(store.items).forEach(function(k){if(store.items[k]==="y")y++;else if(store.items[k]==="n")n++});
+    $("count").innerHTML='확인 <b>'+y+'</b> · 해당 없음 <b>'+n+'</b> · 남은 항목 <b>'+(total-y-n)+'</b> (전체 '+total+')';
+  }
+  function setState(item,s){
+    item.dataset.s=s;
+    var t=item.querySelector(".tick");t.textContent=MARK[s];t.setAttribute("aria-label",LABEL[s]);
+    if(s)store.items[item.dataset.k]=s;else delete store.items[item.dataset.k];
+  }
+  $("list").addEventListener("click",function(e){
+    var hit=e.target.closest(".tick,.q");if(!hit)return;
+    if(e.target.closest("a"))return;
+    var item=hit.closest(".item");if(!item||item.classList.contains("plain"))return;
+    setState(item,NEXT[item.dataset.s||""]);save();count();
+  });
+
+  // 점검 기록
+  ["title","name","date"].forEach(function(f){
+    var el=$("rec-"+f);if(!el)return;
+    if(store.rec[f])el.value=store.rec[f];
+    el.addEventListener("input",function(){store.rec[f]=el.value;save()});
+  });
+  var d=$("rec-date"),dp=$("rec-date-print");
+  if(d&&!d.value){var now=new Date();d.value=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0")}
+  function syncDate(){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d.value);dp.textContent=m?(m[1]+". "+(+m[2])+". "+(+m[3])+"."):""}
+  if(d&&dp){syncDate();d.addEventListener("input",syncDate);d.addEventListener("change",syncDate)}
+
+  // 비고
+  var memo=$("memo"),memoPrint=$("memo-print");
+  function syncMemo(){memoPrint.textContent=memo.value||"(없음)"}
+  memo.value=store.memo;syncMemo();
+  memo.addEventListener("input",function(){store.memo=memo.value;save();syncMemo()});
+
+  // 인쇄
+  function stamp(){
+    var now=new Date();
+    $("stamp").textContent="출력 "+now.getFullYear()+". "+(now.getMonth()+1)+". "+now.getDate()+". · "+location.href.replace(/[#?].*$/,"");
+  }
+  window.addEventListener("beforeprint",stamp);
+  Array.prototype.forEach.call(document.querySelectorAll("[data-print]"),function(b){b.addEventListener("click",function(){stamp();window.print()})});
+
+  // 초기화: 한 번 더 눌러야 실행
+  var reset=$("reset"),armed=null;
+  reset.addEventListener("click",function(){
+    if(!armed){reset.textContent="한 번 더 누르면 지워집니다";armed=setTimeout(function(){armed=null;reset.textContent="표시 지우기"},3000);return}
+    clearTimeout(armed);armed=null;reset.textContent="표시 지우기";
+    Array.prototype.forEach.call(document.querySelectorAll("#list .item[data-k]"),function(it){setState(it,"")});
+    store.items={};save();count();
+  });
+  count();
+})();
+</script>
+</body>
+</html>

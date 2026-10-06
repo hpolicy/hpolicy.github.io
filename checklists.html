@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>계량연구 점검표 묶음</title>
+<meta name="description" content="설문조사 설계, 자료 분석 순서, 분석 재현성, 논문 작성의 네 단계 점검표. 표시한 뒤 PDF로 저장할 수 있음.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<!--
+  계량연구 점검표 묶음 · 작성: Claude(Anthropic의 AI) · 기획·검토: 정혜주(고려대학교 보건정책관리학부) · 배포·수정 자유
+  묶음 구성: checklists.html(표지), checklist-survey.html, checklist-analysis.html, checklist-reproducibility.html, checklist-writing.html
+  다섯 파일을 같은 폴더에 두면 서로 연결됨. 각 파일은 양식과 동작을 모두 안에 담고 있어 따로 열어도 작동함.
+  내용 수정: 아래쪽 const S=[...] 안의 문구를 고침. 항목은 ["질문", "판단 기준"] 형식.
+  항목을 절 중간에 넣거나 빼면 저장된 표시가 어긋나므로 PAGE의 key 끝 v1을 v2로 올림.
+-->
+<style>
+/* 계량연구 점검표 묶음 — 공통 양식
+   Layout: 읽기용 단일 단. 위에 묶음 메뉴와 점검 기록란, 항목은 표시 칸 + 질문 + 판단 기준(작은 글씨) 한 줄씩.
+   인쇄 시에는 메뉴·단추를 숨기고 A4 흑백에서도 표시가 보이도록 테두리와 글자로 그림. */
+:root{
+  --bg:#f6f3ee; --surface:#fffdf9; --fg:#2b2a28; --muted:#6d6a64; --line:#d9d3c8;
+  --accent:#8b1e2d; --accent-soft:#f2e2e3; --done:#3e6b46; --on-done:#ffffff;
+  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+}
+@media screen and (prefers-color-scheme: dark){
+  :root{
+    --bg:#1c1b19; --surface:#242321; --fg:#e8e3da; --muted:#a29c92; --line:#3b3934;
+    --accent:#d9737f; --accent-soft:#3a2427; --done:#8fc99a; --on-done:#1c1b19; color-scheme:dark }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.7;margin:0;word-break:keep-all;overflow-wrap:anywhere}
+.wrap{max-width:760px;margin:0 auto;padding-block:36px 80px;padding-inline:20px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* 묶음 메뉴 */
+.series{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin-bottom:22px}
+.series .here{color:var(--fg);font-weight:500}
+.series a{text-decoration:none;border-bottom:1px solid var(--line)}
+.series a:hover{border-bottom-color:var(--accent)}
+
+header{border-bottom:2px solid var(--accent);padding-bottom:20px;margin-bottom:28px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500}
+h1{font-weight:700;font-size:28px;line-height:1.35;margin:6px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.meta{color:var(--muted);font-size:13px}
+
+.intro{background:var(--surface);border:1px solid var(--line);padding:16px 18px;margin:0 0 24px;font-size:14px}
+.intro p{margin:0 0 6px}.intro p:last-child{margin:0}
+
+/* 점검 기록 */
+.record{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;margin:0 0 26px}
+.record .rec-head{grid-column:1/-1;font-size:13px;font-weight:500;color:var(--accent)}
+.record label{display:block;font-size:12.5px;color:var(--muted);min-width:0}
+.record label.wide{grid-column:1/-1}
+.record input{display:block;width:100%;font:inherit;font-size:15px;color:var(--fg);background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:4px 0 5px;margin-top:2px}
+.record input:focus{border-bottom-color:var(--accent)}
+@media (max-width:520px){.record{grid-template-columns:1fr}}
+
+.toc{margin:0 0 22px}
+.toc ol{list-style:none;margin:0;padding:0;column-count:2;column-gap:24px;font-size:13.5px}
+.toc li{break-inside:avoid}
+.toc a{display:flex;gap:10px;padding:3px 0;text-decoration:none;color:var(--fg)}
+.toc a:hover .tt{text-decoration:underline;text-decoration-color:var(--accent)}
+.toc .tn{color:var(--accent);font-variant-numeric:tabular-nums;min-width:1.5em;font-weight:500}
+@media (max-width:520px){.toc ol{column-count:1}}
+
+/* 진행 현황과 단추 */
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;font-size:13px;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.count{font-variant-numeric:tabular-nums;min-width:0}
+.count b{color:var(--fg);font-weight:500}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button.btn{font:inherit;font-size:13px;color:var(--accent);background:none;border:1px solid var(--line);padding:5px 12px;cursor:pointer;border-radius:0}
+button.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+button.btn:hover{border-color:var(--accent)}
+.legend{font-size:12.5px;color:var(--muted);margin:10px 0 26px}
+
+section{margin-bottom:36px;scroll-margin-top:64px}
+@media (max-width:520px){section{scroll-margin-top:112px}}
+h2{font-weight:700;font-size:18px;margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;font-size:15px;font-weight:500}
+.lead{color:var(--muted);font-size:13px;margin:0 0 10px}
+.group{font-weight:500;font-size:14px;margin:18px 0 2px;color:var(--accent)}
+
+.item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:start}
+.item.first{border-top:none}
+.item.sub{margin-left:22px;border-top-style:dashed}
+.item.plain{grid-template-columns:minmax(0,1fr)}
+.tick{width:18px;height:18px;margin:5px 0 0;padding:0;border:1.5px solid var(--muted);border-radius:2px;background:var(--surface);color:var(--fg);font:700 13px/1 var(--body);display:grid;place-items:center;cursor:pointer}
+.item[data-s="y"] .tick{background:var(--done);border-color:var(--done);color:var(--on-done)}
+.item[data-s="n"] .tick{background:var(--line);border-color:var(--muted);color:var(--fg)}
+.body{min-width:0}
+.q{cursor:pointer}
+.item.plain .q{cursor:auto}
+.na-tag{display:none;font-size:11.5px;line-height:1.5;border:1px solid var(--muted);color:var(--muted);padding:0 6px;margin-left:8px;white-space:nowrap;vertical-align:1px}
+.item[data-s="n"] .na-tag{display:inline-block}
+.note{display:block;color:var(--muted);font-size:13px;line-height:1.65;margin-top:3px}
+.item[data-s="y"] .q{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--done)}
+.item[data-s="n"] .q{color:var(--muted)}
+code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);color:var(--fg);padding:0 4px;border-radius:2px;word-break:normal}
+.gate{background:var(--accent-soft);border-left:3px solid var(--accent);padding:12px 16px;margin-top:16px;font-size:14px}
+
+/* 비고 */
+.memo{margin-top:8px}
+.memo h2{margin-bottom:4px}
+.memo textarea{display:block;width:100%;min-height:120px;font:inherit;font-size:14px;line-height:1.7;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:0;padding:10px 12px;resize:vertical}
+.memo-print{display:none;white-space:pre-wrap;font-size:14px;border:1px solid var(--line);padding:10px 12px;min-height:60px}
+
+.bottom{display:flex;justify-content:flex-end;margin-top:24px}
+footer{margin-top:36px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 4px}
+.print-only{display:none}
+.date-print{display:none}
+
+/* 표지 */
+.set{list-style:none;margin:0 0 34px;padding:0;counter-reset:set}
+.set li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 12px;padding:18px 0;border-top:1px solid var(--line)}
+.set li:last-child{border-bottom:1px solid var(--line)}
+.set .no{color:var(--accent);font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;padding-top:3px}
+.set .name{font-size:19px;font-weight:700;line-height:1.4;text-decoration:none;color:var(--fg)}
+.set .name:hover{color:var(--accent)}
+.set .when{font-size:13px;color:var(--accent);font-weight:500;margin-top:2px}
+.set .desc{font-size:14px;margin-top:4px}
+.set .stat{font-size:12.5px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.set .stat b{color:var(--fg);font-weight:500}
+h2.plainh{display:block;font-size:17px;margin:0 0 8px}
+.howto{margin:0 0 30px;padding-left:1.3em;font-size:14.5px}
+.howto li{margin-bottom:4px;padding-left:2px}
+
+@media (prefers-reduced-motion:no-preference){.q{transition:color .15s}}
+
+/* 인쇄(PDF 저장) */
+@page{size:A4;margin:16mm 15mm 18mm;@bottom-center{content:counter(page) " / " counter(pages);font-family:"Noto Sans KR",sans-serif;font-size:8pt;color:#6d6a64}}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt;line-height:1.6}
+  .wrap{max-width:none;padding:0}
+  .series,.toc,.btns,.legend,.bottom,.screen-only{display:none!important}
+  .print-only{display:block}
+  header{padding-bottom:10pt;margin-bottom:14pt}
+  h1{font-size:19pt}
+  .intro{background:none;font-size:9.5pt;padding:8pt 10pt;margin-bottom:14pt}
+  .record{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:14pt}
+  .record input{font-size:10.5pt;border-bottom:.6pt solid #2b2a28}
+  .record input[type=date]{display:none}
+  .date-print{display:block;font-size:10.5pt;color:var(--fg);border-bottom:.6pt solid #2b2a28;padding:4px 0 5px;margin-top:2px;min-height:1.9em}
+  .tools{position:static;background:none;border-color:#2b2a28;padding:6pt 0;margin-bottom:14pt;font-size:9.5pt;color:#2b2a28}
+  section{margin-bottom:16pt}
+  h2{font-size:13pt;break-after:avoid}
+  .lead,.group{break-after:avoid}
+  .lead{font-size:9pt}
+  .item{break-inside:avoid;padding:5pt 0;grid-template-columns:16pt minmax(0,1fr);gap:7pt}
+  .item.plain{grid-template-columns:minmax(0,1fr)}
+  .tick{width:11pt;height:11pt;margin-top:3pt;border:.9pt solid #2b2a28!important;background:#fff!important;color:#000!important;font-size:9.5pt}
+  .item[data-s="y"] .q,.item[data-s="n"] .q{color:var(--fg);text-decoration:none}
+  .na-tag{border-color:#2b2a28;color:#2b2a28;font-size:8pt}
+  .note{font-size:9pt;line-height:1.55;color:#55524d}
+  code{background:none;padding:0}
+  .gate{background:none;border:.6pt solid #2b2a28;border-left:2.5pt solid var(--accent);padding:7pt 10pt;font-size:10pt;break-inside:avoid}
+  .memo textarea{display:none}
+  .memo-print{display:block;font-size:10pt}
+  .memo{break-inside:avoid;margin-top:22pt}
+  footer{font-size:8.5pt;margin-top:18pt}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="series" aria-label="점검표 묶음"><span class="here" aria-current="page">점검표 묶음</span><a href="checklist-survey.html">설문조사 설계·수행 점검표</a><a href="checklist-analysis.html">자료 분석 순서 점검표</a><a href="checklist-reproducibility.html">분석 재현성 점검표</a><a href="checklist-writing.html">논문 작성 점검표</a></nav>
+<header>
+  <div class="eyebrow">Research checklists</div>
+  <h1>계량연구 점검표 묶음</h1>
+  <div class="meta">설문조사 설계에서 논문 투고까지 · 2026. 10. · 기획·검토 정혜주(고려대 보건정책관리학부) · 작성 Claude</div>
+</header>
+
+<div class="intro">
+  <p>계량연구를 하는 학생·연구원이 스스로 점검하고, 지도교수가 같은 항목으로 대조하기 위한 점검표입니다. 연구가 진행되는 순서대로 네 개로 나뉘어 있습니다.</p>
+  <p>2차자료를 쓰는 연구는 2번부터 시작합니다.</p>
+</div>
+
+<ol class="set">
+<li>
+  <div class="no">1</div>
+  <div>
+    <a class="name" href="checklist-survey.html">설문조사 설계·수행 점검표</a>
+    <div class="when">직접 자료를 수집할 때</div>
+    <div class="desc">조사 계획, 표본설계, 설문지 개발, 사전조사, 연구윤리와 개인정보, 조사 수행, 자료 정제, 보고</div>
+    <div class="stat" data-key="hpolicy-checklist-survey-v1" data-total="59">9개 절 · 59개 항목</div>
+  </div>
+</li>
+<li>
+  <div class="no">2</div>
+  <div>
+    <a class="name" href="checklist-analysis.html">자료 분석 순서 점검표</a>
+    <div class="when">분석을 시작해서 표를 확정하기까지</div>
+    <div class="desc">자료 구조 확인, 변수별 점검, 분포와 정규성, 결측, 기술분석, 모형 설정과 진단, 결과 해석, 민감도 분석</div>
+    <div class="stat" data-key="hpolicy-checklist-analysis-v1" data-total="77">12개 절 · 77개 항목</div>
+  </div>
+</li>
+<li>
+  <div class="no">3</div>
+  <div>
+    <a class="name" href="checklist-reproducibility.html">분석 재현성 점검표</a>
+    <div class="when">분석 설계 확정 시, 학위논문 심사 전, 학술지 투고 전</div>
+    <div class="desc">원자료와 코드 관리, 표본 정의, 변수 생성, 표·그림 대조, 독립 재현, 오류 대응, 인수인계</div>
+    <div class="stat" data-key="hpolicy-checklist-repro-v1" data-total="77">13개 절 · 77개 항목</div>
+  </div>
+</li>
+<li>
+  <div class="no">4</div>
+  <div>
+    <a class="name" href="checklist-writing.html">논문 작성 점검표</a>
+    <div class="when">초고를 쓰기 전부터 투고와 수정까지</div>
+    <div class="desc">제목과 초록, 서론, 방법, 결과, 표와 그림, 고찰, 참고문헌, 투명성과 윤리, 투고, 수정 요청 대응</div>
+    <div class="stat" data-key="hpolicy-checklist-writing-v1" data-total="82">13개 절 · 82개 항목</div>
+  </div>
+</li>
+</ol>
+
+<h2 class="plainh">쓰는 법</h2>
+<ol class="howto">
+  <li>해당 단계의 점검표를 열고 논문·과제명, 점검자, 점검일을 적습니다.</li>
+  <li>항목 앞의 네모를 눌러 표시합니다. 한 번 누르면 확인(✓), 한 번 더 누르면 해당 없음(–)입니다.</li>
+  <li>확인하지 못한 항목은 비워 두고, 그 사유를 맨 아래 비고에 적습니다.</li>
+  <li>「PDF로 저장·인쇄」를 누르고, 인쇄 창의 대상(프린터)에서 「PDF로 저장」을 고릅니다.</li>
+</ol>
+
+<footer>
+  <p>표시와 기록은 사용하는 브라우저에만 저장되며 다른 기기나 다른 사람에게 보이지 않습니다. 남겨야 하는 점검 결과는 PDF로 저장해 둡니다.</p>
+  <p>이 점검표는 Claude(Anthropic의 AI)가 <a href="https://hpolicy.korea.ac.kr/">정혜주</a>(고려대학교 보건정책관리학부)의 기획과 검토 아래 작성하고 문헌과 대조했습니다. 배포·수정 자유.</p>
+</footer>
+</div>
+<script>
+Array.prototype.forEach.call(document.querySelectorAll(".stat[data-key]"),function(el){
+  try{
+    var st=JSON.parse(localStorage.getItem(el.dataset.key)||"null");if(!st||!st.items)return;
+    var y=0,n=0;Object.keys(st.items).forEach(function(k){if(st.items[k]==="y")y++;else if(st.items[k]==="n")n++});
+    if(y+n===0)return;
+    el.innerHTML+=' · 이 브라우저에서 확인 <b>'+y+'</b>, 해당 없음 <b>'+n+'</b>, 남은 항목 <b>'+(el.dataset.total-y-n)+'</b>';
+  }catch(e){}
+});
+</script>
+</body>
+</html>
